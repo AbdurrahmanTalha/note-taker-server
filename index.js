@@ -68,6 +68,19 @@ async function run() {
             const result = await todoCollection.deleteOne(query)
             res.send(result)
         })
+        app.put("/complete/:id", verifyJWT, async (req, res) => {
+            const id = req.params.id;
+            const updatedComplete = req.body;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true }
+            const updatedDoc = {
+                $set: {
+                    complete: updatedComplete.complete
+                }
+            }
+            const result = await todoCollection.updateOne(filter, updatedDoc, options);
+            res.send(result)
+        })
     }
     finally {
 
